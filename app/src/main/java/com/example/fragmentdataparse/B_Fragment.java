@@ -1,0 +1,68 @@
+package com.example.fragmentdataparse;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+public class B_Fragment extends Fragment {
+    private FragmnetBListner listner;
+    EditText edttext;
+    Button btntransfer;
+
+    public interface FragmnetBListner {
+        void onInputAsent(CharSequence inpunt);
+
+    }
+
+    @SuppressLint("MissingInflatedId")
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.b_fragment, container, false);
+
+        edttext = view.findViewById(R.id.Bedttext);
+        btntransfer = view.findViewById(R.id.Bbtntransfer);
+
+        btntransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CharSequence input = edttext.getText();
+                listner.onInputAsent(input);
+            }
+        });
+        return view;
+    }
+
+    public void updateEdittext(CharSequence newtext) {
+        edttext.setText(newtext);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof B_Fragment.FragmnetBListner) {
+            listner = (B_Fragment.FragmnetBListner) context;
+
+        } else {
+            throw new RuntimeException(context.toString() + "must implement FragmnetAListner");
+
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        listner = null;
+    }
+}
+
